@@ -1,0 +1,33 @@
+version: "3.1"
+services:
+  # api:
+  #   build:
+  #     context: ../backend/api
+  #     dockerfile: ./Dockerfile
+  #   restart: on-failure
+  #   environment:
+  #     - DB_TYPE="pgx"   # pgx or mysql
+  #     - DB_HOST="cgapp-postgres"
+  #     - DB_PORT=5432
+  #     - DB_USER="postgres"
+  #     - DB_PASSWORD="password"
+  #     - DB_NAME="postgres"
+  #     - DB_SSL_MODE="disable"
+  #     - DB_MAX_CONNECTIONS=100
+  #     - DB_MAX_IDLE_CONNECTIONS=3
+  #     - DB_MAX_LIFETIME_CONNECTIONS=20
+  #   ports:
+  #     - 5000:5000
+  #   links:
+  #     - db
+  #   # command: sh -c "sleep 10;"
+  
+  db:
+    image: postgres
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: postgres
+      POSTGRES_DB: cgapp-postgres
