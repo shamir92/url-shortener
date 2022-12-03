@@ -36,7 +36,7 @@ func initDatabase() {
 	)
 
 	database.DBConn, err = gorm.Open(postgres.Open(dsn), &gorm.Config{
-		Logger: logger.Default.LogMode(logger.Info),
+		Logger: logger.Default.LogMode(logger.Silent),
 	})
 	sqlDb, err := database.DBConn.DB()
 
@@ -72,6 +72,7 @@ func main() {
 	// Define a new Fiber app with config.
 	app := fiber.New(config)
 	initDatabase()
+	helpers.InitEtcd()
 	// Middlewares.
 	middleware.FiberMiddleware(app) // Register Fiber's middleware for app.
 

@@ -11,7 +11,7 @@ func PublicRoutes(a *fiber.App) {
 	route := a.Group("/api/v1")
 
 	// Routes for GET method:
-	// route.Get("/shortUrl", controllers.CreateShortUrl) // get list of all books
+	route.Get("/short-url/:shortUrl", controllers.GetShortUrl) // get list of all books
 
 	// Routes for POST method:
 	route.Post("/short-url", controllers.CreateShortUrl) // get list of all books
