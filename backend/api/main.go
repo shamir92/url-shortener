@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/create-go-app/fiber-go-template/app/helpers"
@@ -25,6 +26,8 @@ import (
 
 func initDatabase() {
 	var err error
+	log.Println(os.Environ())
+
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=%s TimeZone=%s",
 		os.Getenv("DB_HOST"),
 		os.Getenv("DB_USER"),
@@ -38,15 +41,16 @@ func initDatabase() {
 	database.DBConn, err = gorm.Open(postgres.Open(dsn), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Silent),
 	})
-	sqlDb, err := database.DBConn.DB()
-
-	sqlDb.SetMaxIdleConns(helpers.GetEnvInt("DB_MAX_IDLE_CONNS"))
-	sqlDb.SetMaxOpenConns(helpers.GetEnvInt("DB_MAX_CONNECTIONS"))
-	sqlDb.SetConnMaxLifetime(helpers.GetEnvTimeDuration("DB_MAX_LIFETIME_CONNECTIONS"))
-
 	if err != nil {
+		log.Fatal(err)
 		panic("failed to connect database")
 	}
+
+	sqlDb, err := database.DBConn.DB()
+
+	sqlDb.SetMaxIdleConns(helpers.GetEnvInt("DB_MAX_IDLE_CONNECTIONS"))
+	sqlDb.SetMaxOpenConns(helpers.GetEnvInt("DB_MAX_CONNECTIONS"))
+	sqlDb.SetConnMaxLifetime(helpers.GetEnvTimeDuration("DB_MAX_LIFETIME_CONNECTIONS"))
 
 	fmt.Println("Connection Opened to Database")
 	database.DBConn.AutoMigrate(models.ShortUrl{})
